@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: sermalenk/skypro-front:lesson-36
+    restart: always
+    depends_on:
+      - api
+    ports:
+      - 80:80
+  postgres:
+    image: postgres:12.4-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  migrations:
+    build:
+      context: .
+    env_file:
+      - ./.docker_env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: python manage.py migrate
+  api:
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    restart: always
+    volumes:
+      - ./.docker_env:/app/.env
+      - ./core:/app/core
+      - ./goals:/app/goals
+      - ./ToDoList:/app/todolist
+
+volumes:
+  postgres_data:

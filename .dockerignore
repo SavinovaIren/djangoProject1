@@ -1,0 +1,9 @@
+.env
+.env_example
+/venv
+/postgres_todolist
+.gitignore
+docker-compose.yaml
+docker-compose_ci.yaml
+Dockerfile
+README.md
