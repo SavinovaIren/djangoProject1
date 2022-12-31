@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.USERNAME_DEPLOY }}
           password: ${{ secrets.PASSWORD_DEPLOY }}
           source: "deploy/docker-compose.yaml,deploy/.env"
-          target: "course_7"
+          target: "postgres"
           strip_components: 1
       - name: deploy
         uses: appleboy/ssh-action@master
@@ -46,6 +46,6 @@ jobs:
           username: ${{ secrets.USERNAME_DEPLOY }}
           password: ${{ secrets.PASSWORD_DEPLOY }}
           script: |
-            cd course_7
+            cd postgres
             echo ${{ secrets.PASSWORD_DEPLOY }} | sudo -S docker-compose down
             echo ${{ secrets.PASSWORD_DEPLOY }} | sudo -S docker-compose up -d
