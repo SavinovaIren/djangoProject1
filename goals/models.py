@@ -61,15 +61,3 @@ class Comment(models.Model):
     updated = models.DateTimeField(verbose_name='Дата последнего обновления', auto_now=True)
     text = models.TextField(verbose_name='Текст')
     goal = models.ForeignKey(Goal, verbose_name='Цель', on_delete=models.PROTECT)
-
-
-# class Question(models.Model):
-#     text = models.TextField()
-#     # ...
-#
-# class Answer(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     # ...
-#
-#     class Meta:
-#         order_with_respect_to = 'question'

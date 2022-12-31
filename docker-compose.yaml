@@ -43,8 +43,6 @@ services:
     volumes:
       - ./.docker_env:/app/.env
       - ./core:/app/core
-      - ./goals:/app/goals
-      - ./ToDoList:/app/todolist
 
 volumes:
   postgres_data:
