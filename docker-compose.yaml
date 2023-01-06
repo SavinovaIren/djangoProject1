@@ -54,7 +54,7 @@ services:
       postgres:
         condition: service_healthy
     env_file:
-      - .env_docker
+      - .docker_env
     command: >
       sh -c "python manage.py runbot"
 
