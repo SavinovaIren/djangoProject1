@@ -23,7 +23,7 @@ jobs:
       SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
       SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      DB_HOST: {{secrets.DB_HOST}}
+      DB_HOST: ${{secrets.DB_HOST}}
     steps:
       - name: clone code
         uses: actions/checkout@v3
