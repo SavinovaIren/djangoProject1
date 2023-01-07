@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_and_push
     env:
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_NAME: ${{ secrets.DB_NAME }}
+      POSTGRES_DB: ${{ secrets.DB_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      POSTGRES_NAME: ${{ secrets.DB_NAME }}
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
       SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
       BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-      DB_HOST: ${{secrets.DB_HOST}}
+      POSTGRES_HOST: ${{secrets.DB_HOST}}
     steps:
       - name: clone code
         uses: actions/checkout@v3
