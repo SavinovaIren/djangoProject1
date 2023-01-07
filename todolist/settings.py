@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 import environ
@@ -95,7 +95,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db(),
+    'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
+        }
 }
 
 # Password validation
