@@ -29,7 +29,7 @@ environ.Env.read_env(ENV_FILE_PATH)
 SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', False)
+DEBUG = env.bool('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -95,11 +95,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.path.join(BASE_DIR, 'db.postgresql'),
-        }
+    'default': env.db('DATABASE_URL'),
 }
+# Search for Debug in your settings and replace with this
+
+# Add this one to your settings
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
