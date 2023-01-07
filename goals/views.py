@@ -14,6 +14,7 @@ from goals.serializers import GoalCategoryCreateSerializer, GoalCategorySerializ
 
 
 class GoalCategoryCreateView(CreateAPIView):
+    """Создание категории для категории цели"""
     model = GoalCategory
     permission_classes = [IsAuthenticated]
     serializer_class = GoalCategoryCreateSerializer
@@ -53,6 +54,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
 
 
 class GoalCreateView(CreateAPIView):
+    """Создание категории для цели"""
     model = Goal
     permission_classes = [IsAuthenticated]
     serializer_class = GoalCreateSerializer
@@ -88,6 +90,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 
 
 class CommentCreateView(CreateAPIView):
+    """Создание категории для комментария"""
     model = Comment
     serializer_class = CommentCreateSerializer
     permission_classes = [IsAuthenticated]
