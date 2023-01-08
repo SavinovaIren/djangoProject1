@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
     'core',
     'goals',
-    'bot',
+    # 'bot',
 
 ]
 
@@ -100,7 +100,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'postgres',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
