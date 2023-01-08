@@ -1,63 +1,43 @@
-from dataclasses import dataclass, field
-from typing import List, Optional
-import marshmallow_dataclass
-from marshmallow import EXCLUDE
+from pydantic import BaseModel, Field
+from typing import Optional
 
-@dataclass
-class MessageFrom:
+
+class MessageFrom(BaseModel):
     id: int
-    is_bot: bool
-    first_name: Optional[str]
-    last_name: Optional[str]
-    username: Optional[str]
+    first_name: str
+    last_name: Optional[str] = None
+    username: Optional[str] = None
 
-    class Meta:
-        unknown = EXCLUDE
 
-@dataclass
-class Chat:
+class Chat(BaseModel):
     id: int
     type: str
-    first_name: Optional[str]
-    last_name: Optional[str]
-    username: Optional[str]
-    title: Optional[str]
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    title: Optional[str] = None
 
-    class Meta:
-        unknown = EXCLUDE
 
-@dataclass
-class Message:
+class Message(BaseModel):
     message_id: int
-    from_: MessageFrom = field(metadata={'data_key': 'from'})
+    from_: MessageFrom = Field(..., alias="from")
     chat: Chat
-    date: int
-    text: Optional[str]
+    text: Optional[str] = None
 
-    class Meta:
-        unknown = EXCLUDE
+    class Config:
+        allow_population_by_field_name = True
 
 
-@dataclass
-class UpdateObj:
+class UpdateObj(BaseModel):
     update_id: int
     message: Message
 
-    class Meta:
-        unknown = EXCLUDE
 
-@dataclass
-class GetUpdatesResponse:
+class GetUpdatesResponse(BaseModel):
     ok: bool
-    result: List[UpdateObj]
+    result: list[UpdateObj] = []
 
-    class Meta:
-        unknown = EXCLUDE
 
-@dataclass
-class SendMessageResponse:
+class SendMessageResponse(BaseModel):
     ok: bool
     result: Message
-
-    class Meta:
-        unknown = EXCLUDE
