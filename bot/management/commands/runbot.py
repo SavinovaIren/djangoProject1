@@ -3,10 +3,12 @@ from django.core.management.base import BaseCommand
 from bot.models import TgUser
 from bot.tg.client import TgClient
 from bot.tg.dc import Message
+from todolist import settings
+
 
 class Command(BaseCommand):
     help = 'Runs Telegram bot'
-    tg_client = TgClient('5717472826:AAFhRnkZGDl2ChzbR9qiooGEDFW8-fTefWg')
+    tg_client = TgClient(settings.BOT_TOKEN)
 
     def handle_unverified_user(self, msg:Message, tg_user: TgUser):
         code = '123'
