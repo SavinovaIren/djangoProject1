@@ -1,72 +1,43 @@
-from dataclasses import field
-
-import marshmallow_dataclass
-from marshmallow import EXCLUDE
-from typing import List
-from marshmallow_dataclass import dataclass
+from pydantic import BaseModel, Field
+from typing import Optional
 
 
-@dataclass
-class MessageFrom:
+class MessageFrom(BaseModel):
     id: int
-    is_bot: bool
-    first_name: str | None
-    last_name: str | None
-    username: str
-
-    class Meta:
-        unknown = EXCLUDE
+    first_name: str
+    last_name: Optional[str] = None
+    username: Optional[str] = None
 
 
-@dataclass
-class MessageChat:
+class Chat(BaseModel):
     id: int
-    first_name: str | None
-    username: str | None
-    last_name: str | None
     type: str
-    title: str | None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    title: Optional[str] = None
 
-    class Meta:
-        unknown = EXCLUDE
 
-
-@dataclass
-class Message:
+class Message(BaseModel):
     message_id: int
-    msg_from: MessageFrom = field(metadata={'data_key': 'from'})
-    chat: MessageChat
-    date: int
-    text: str | None
+    from_: MessageFrom = Field(..., alias="from")
+    chat: Chat
+    text: Optional[str] = None
 
-    class Meta:
-        unknown = EXCLUDE
+    class Config:
+        allow_population_by_field_name = True
 
-@dataclass
-class UpdateObj:
+
+class UpdateObj(BaseModel):
     update_id: int
     message: Message
 
-    class Meta:
-        unknown = EXCLUDE
 
-@dataclass
-class GetUpdatesResponse:
+class GetUpdatesResponse(BaseModel):
     ok: bool
-    result: List[UpdateObj]
-
-    class Meta:
-        unknown = EXCLUDE
+    result: list[UpdateObj] = []
 
 
-@dataclass
-class SendMessageResponse:
+class SendMessageResponse(BaseModel):
     ok: bool
     result: Message
-
-    class Meta:
-        unknown = EXCLUDE
-
-
-GET_UPDATES_SCHEMA = marshmallow_dataclass.class_schema(GetUpdatesResponse)()
-SEND_MESSAGE_RESPONSE_SCHEMA = marshmallow_dataclass.class_schema(SendMessageResponse)()
