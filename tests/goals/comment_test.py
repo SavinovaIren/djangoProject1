@@ -1,10 +1,10 @@
 import pytest
 from django.utils import timezone
 
-from goals.serializers import GoalCommentSerializer
+from goals.serializers import GoalSerializer
 from tests.factories import GoalCommentFactory
 
-from goals.models import GoalComment
+from goals.models import Comment
 
 
 @pytest.mark.django_db
@@ -21,7 +21,7 @@ def test_comment_create(client, get_credentials, goal):
         content_type="application/json",
         HTTP_AUTHORIZATION=get_credentials,
     )
-    comment = GoalComment.objects.last()
+    comment = Comment.objects.last()
     assert response.status_code == 201
     assert response.data == {
         "id": comment.id,
@@ -56,7 +56,7 @@ def test_comment_retrieve(client, get_credentials, goal_comment, board_participa
     )
 
     assert response.status_code == 200
-    assert response.data == GoalCommentSerializer(goal_comment).data
+    assert response.data == GoalSerializer(goal_comment).data
 
 
 @pytest.mark.django_db
