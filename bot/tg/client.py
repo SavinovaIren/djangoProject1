@@ -2,6 +2,7 @@ import requests
 
 from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
 
+
 class TgClient:
     def __init__(self, token: str):
         self.token = token
