@@ -1,6 +1,5 @@
 import requests
-
-from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
+from bot.tg.models import GetUpdatesResponse, SendMessageResponse
 
 
 class TgClient:
@@ -12,7 +11,7 @@ class TgClient:
 
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
         url = self.get_url("getUpdates")
-        response = requests.get(url, params={"offset": offset, "timeout": timeout, "allowed_updates": ["update_id", "message"]})
+        response = requests.get(url, params={"offset": offset, "timeout": timeout})
         return GetUpdatesResponse(**response.json())
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
