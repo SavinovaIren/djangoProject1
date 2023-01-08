@@ -1,5 +1,5 @@
 import requests
-from bot.tg.models import GetUpdatesResponse, SendMessageResponse
+from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
 
 
 class TgClient:
