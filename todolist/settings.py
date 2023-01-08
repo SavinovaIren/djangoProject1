@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 
     'core',
     'goals',
-    # 'bot',
+    'bot',
 
 ]
 
