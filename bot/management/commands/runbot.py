@@ -39,15 +39,17 @@ class Command(BaseCommand):
         return os.urandom(12).hex()
 
     def handle_unverified_user(self, msg: Message, tg_user: TgUser):
+        # Создаем пользователя и заносим в базу данных
         code: str = self._generate_verification_code()
         tg_user.verification_code = code
         tg_user.save(update_fields=("verification_code",))
         self.tg_client.send_message(
             chat_id=msg.chat.id,
-            text=f"[verification_code] {tg_user.verification_code}"
+            text=f"Код верификации {tg_user.verification_code}"
         )
 
     def handle_goals_list(self, msg: Message, tg_user: TgUser):
+        #Запрашиваем список целей
         goals = Goal.objects.filter(
             category__board__participants__user_id=tg_user.user_id,
             category__is_deleted=False
@@ -56,9 +58,10 @@ class Command(BaseCommand):
         if result:
             self.tg_client.send_message(msg.chat.id, "\n".join(result))
         else:
-            self.tg_client.send_message(msg.chat.id, "[you have no goals!]")
+            self.tg_client.send_message(msg.chat.id, "У вас нет целей!")
 
     def handle_goal_categories_list(self, msg: Message, tg_user: TgUser):
+        #Запрашиваем список категорий
         resp_categories: list[str] = [
             f"#{cat.id} {cat.title}"
             for cat in GoalCategory.objects.filter(
@@ -67,11 +70,12 @@ class Command(BaseCommand):
             )
         ]
         if resp_categories:
-            self.tg_client.send_message(msg.chat.id, "Select category\n" + "\n".join(resp_categories))
+            self.tg_client.send_message(msg.chat.id, "Выберите категорию\n" + "\n".join(resp_categories))
         else:
-            self.tg_client.send_message(msg.chat.id, "[you have no categories]")
+            self.tg_client.send_message(msg.chat.id, "У вас нет категорий!")
 
     def handle_save_selected_category(self, msg: Message, tg_user: TgUser):
+        #Запрашиваем выбор категории
         if msg.text.isdigit():
             cat_id = int(msg.text)
             if GoalCategory.objects.filter(
@@ -81,14 +85,15 @@ class Command(BaseCommand):
                     id=cat_id
             ).exists():
                 self.storage.update_data(chat_id=msg.chat.id, cat_id=cat_id)
-                self.tg_client.send_message(msg.chat.id, "[set title]")
+                self.tg_client.send_message(msg.chat.id, "Введите категорию")
                 self.storage.set_state(msg.chat.id, state=StateEnum.CHOSEN_CATEGORY)
             else:
-                self.tg_client.send_message(msg.chat.id, "[category not found]")
+                self.tg_client.send_message(msg.chat.id, "Категория не найдена")
         else:
-            self.tg_client.send_message(msg.chat.id, "[invalid category id]")
+            self.tg_client.send_message(msg.chat.id, "Недопустимый идентификатор категории")
 
     def handle_save_new_cat(self, msg: Message, tg_user: TgUser):
+        #Создание цели
         goal = NewGoal(**self.storage.get_data(tg_user.chat_id))
         goal.goal_title = msg.text
         if goal.is_completed:
@@ -98,13 +103,14 @@ class Command(BaseCommand):
                 user_id=tg_user.user_id,
 
             )
-            self.tg_client.send_message(msg.chat.id, "[New goal created]")
+            self.tg_client.send_message(msg.chat.id, "Новая цель создана")
         else:
-            self.tg_client.send_message(msg.chat.id, "[something went wrong]")
+            self.tg_client.send_message(msg.chat.id, "Что-то пошло не так")
 
         self.storage.reset(tg_user.chat_id)
 
     def handle_verified_user(self, msg: Message, tg_user: TgUser):
+        #Описываем запросы пользователя
         if msg.text == "/goals":
             self.handle_goals_list(msg, tg_user)
         elif msg.text == "/create":
@@ -114,7 +120,7 @@ class Command(BaseCommand):
 
         elif msg.text == "/cancel" and self.storage.get_state(tg_user.chat_id):
             self.storage.reset(tg_user.chat_id)
-            self.tg_client.send_message(msg.chat.id, "[canceled]")
+            self.tg_client.send_message(msg.chat.id, "Отмена!")
 
         elif state := self.storage.get_state(tg_user.chat_id):
             match state:
@@ -126,7 +132,7 @@ class Command(BaseCommand):
                     logger.warning("Invalid state %s", state)
 
         elif msg.text.startswith("/"):
-            self.tg_client.send_message(msg.chat.id, "[unknown command]")
+            self.tg_client.send_message(msg.chat.id, "Неизвестная команда")
 
     def handle_message(self, msg: Message):
         tg_user, _ = TgUser.objects.select_related("user").get_or_create(
