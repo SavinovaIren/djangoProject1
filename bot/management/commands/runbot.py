@@ -88,7 +88,7 @@ class Command(BaseCommand):
         TgUser.objects.create(
             tg_chat_id=message.chat.id,
             tg_user_id=message.from_.id,
-            tg_username=message.from_.username,
+            user=message.from_.username,
             verification_code=verification_code
         )
         tg_client.send_message(chat_id=message.chat.id,
