@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from bot.models import TgUser
+from .serializers import TgUserSerializer
 
 from .tg.client import TgClient
 
@@ -12,6 +13,8 @@ from .tg.client import TgClient
 class BotVerificationView(generics.UpdateAPIView):
     queryset = TgUser.objects.all()
     permission_classes = [IsAuthenticated]
+    http_method_names = ['patch']
+    serializer_class = TgUserSerializer
 
     def patch(self, request, *args, **kwargs):
         verif_code = self.request.data.get("verification_code")
