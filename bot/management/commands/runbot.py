@@ -77,7 +77,6 @@ class Command(BaseCommand):
         Создание кода верификации
         :return: get_random_string
         """
-        # return get_random_string(length=15)
         code = "qwertyuiopasdfghjklzxcvbnm1234567890(){}:';[]/.,"
         s = ''.join(random.choices(code, k=6))
         return s
